@@ -6,11 +6,11 @@ import {
   UnstyledButton,
   Group,
   Text,
+  Checkbox,
   Center,
   TextInput,
-  MantineProvider,
-  Checkbox,
   Input,
+  MantineProvider,
 } from "@mantine/core";
 import {
   IconSelector,
@@ -54,14 +54,13 @@ const useStyles = createStyles((theme) => ({
   flexContainer: {
     display: "flex",
     flexDirection: "row",
-  }
+  },
 }));
 
 interface Stars {
   description: string;
   date: Date;
   uid: string;
-  noms: boolean;
 }
 
 interface RowData {
@@ -165,14 +164,14 @@ function sortData(
 
 export function StarTable({ data }: TableSortProps) {
   const { classes } = useStyles();
+
   useEffect(() => {
     setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search, noms: isNomsChecked })
+      sortData(data, { sortBy, reversed: reverseSortDirection, search })
     );
   }, [data]);
 
   const [search, setSearch] = useState("");
-  const [isNomsChecked, setNomsChecked] = useState(false);
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -181,21 +180,21 @@ export function StarTable({ data }: TableSortProps) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search, noms: isNomsChecked }));
+    setSortedData(sortData(data, { sortBy: field, reversed, search }));
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
     setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value, noms: isNomsChecked })
+      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
     );
   };
 
-  const handleNomsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked } = event.currentTarget;
-    setNomsChecked(checked);
+  const handleNomsChange = (event: React.ChangeEvent<HTMLInputElement>) = {
+    console.log(value);
   };
+
 
   const rows = sortedData.map((row) => (
     <tr key={row.name}>
@@ -213,26 +212,26 @@ export function StarTable({ data }: TableSortProps) {
       </td>
     </tr>
   ));
+
   return (
     <ScrollArea>
       <div className={classes.flexContainer}>
-      <TextInput
-        placeholder="Name"
-        size="md"
-        icon={<IconSearch size={16} stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
-        style={{ marginBottom: 0, flex: "auto"}}
-      />
-      <Center>
-        <Checkbox
+        <TextInput
+          placeholder="Name"
+          size="md"
+          icon={<IconSearch size={16} stroke={1.5} />}
+          value={search}
+          onChange={handleSearchChange}
+          style={{ marginBottom: 0 , flex: "auto"}}
+        />
+        <Center>
+        <Checkbox 
           label="Noms"
           size="md"
           onChange={handleNomsChange}
-          style={{marginRight: 20, marginLeft: 20}}
-          />
-      </Center>
-      </div>
+        />
+        </Center>
+        </div>
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"

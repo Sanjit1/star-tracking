@@ -127,19 +127,21 @@ function Th({ children, reversed, sorted, onSort, normalWidth }: ThProps) {
   );
 }
 
-function filterData(data: RowData[], search: string) {
+function filterData(data: RowData[], search: string, noms: boolean) {
   const query = search.toLowerCase().trim();
-  return data.filter((item) => item.name.toLowerCase().includes(query));
+  return data.filter((item) => {
+    item.name.toLowerCase().includes(query)
+  })
 }
 
 function sortData(
   data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
+  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string; noms: boolean }
 ) {
   const { sortBy } = payload;
 
   if (!sortBy) {
-    return filterData(data, payload.search);
+    return filterData(data, payload.search, payload.noms);
   }
 
   return filterData(
@@ -159,7 +161,8 @@ function sortData(
 
       return (a[sortBy] as string).localeCompare(b[sortBy] as string);
     }),
-    payload.search
+    payload.search,
+    payload.noms
   );
 }
 
